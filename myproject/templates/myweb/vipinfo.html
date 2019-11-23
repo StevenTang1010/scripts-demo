@@ -1,0 +1,99 @@
+{% extends 'myweb/base.html' %}
+{% load static from staticfiles %}
+{% block mylink %}
+    <link rel="stylesheet" type="text/css" href="{% static 'myweb/css/order.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'myweb/css/order-app.css' %}">
+{% endblock %}
+{% block mainbody %}
+    <div class="mainbody order">
+        <div class="container">
+            <!-- 面包屑导航 -->
+            <div class="crumbs col-xs-12 col-sm-12">
+                <ol class="breadcrumb">
+                    <li class="hidden-xs hidden-sm"><a href="{% url 'index' %}">首页</a></li>
+                    <li class="hidden-xs hidden-sm"><a href="{% url 'index' %}">我的商城</a></li>
+                    <li class="active">我的订单</li>
+                </ol>
+            </div><!-- 面包屑导航 E-->
+
+            <div class="main clearfix">
+                <!-- 左侧导航 -->
+                <div class="left-nav f-fl col-md-4 hidden-xs hidden-sm">
+                    <div class="nav-main">
+                        <a href="javascript:;" class="type-title"><span class="glyphicon glyphicon-list-alt"
+                                                                        aria-hidden="true"></span>订单中心</a>
+                        <a href="{% url 'vip_orders' %}" class="ml active">我的订单</a>
+                        <a href="#" class="ml ">我的回购单</a>
+                        <a href="#" class="ml ">我的意外保</a>
+                        <a href="javascript:;" class="type-title"><span class="glyphicon glyphicon-user"
+                                                                        aria-hidden="true"></span>个人中心</a>
+                        <a href="{% url 'vip_info' %}" class="ml ">信息管理</a>
+                        <a href="{% url 'vip_resetps' %}" class="ml ">密码重置</a>
+                        <a href="#" class="ml ">消息提醒</a>
+                        <a href="#" class="ml ">建议反馈</a>
+                    </div>
+                </div><!-- 左侧导航 E-->
+                <div>
+                    <h1>
+                        会员信息管理
+                    </h1>
+                    <form id="edit-profile" action="{% url 'vip_update' %}" method="post"
+                          class="form-horizontal">
+                        {% csrf_token %}
+                        <fieldset>
+                            <legend>编辑会员信息</legend>
+                            <div class="control-group">
+                                <label class="control-label" for="input01" >登陆账号</label>
+                                <div class="controls">
+                                    <input type="text" name="username" id="input01" disabled class="input-xlarge"
+                                           value="{{ user.username }}"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">性别</label>
+                                <div class="controls">
+                                    <input type="radio" name="sex" id="input01" class="input-large" value="1"
+                                           {% if user.sex == 1 %}checked{% endif %}/>男
+                                    <input type="radio" name="sex" id="input01" class="input-large" value="0"
+                                           {% if user.sex == 0 %}checked{% endif %}/>女
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">地址</label>
+                                <div class="controls">
+                                    <input type="text" name="address" id="input01" class="input-xlarge"
+                                           value="{{ user.address }}"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">邮编</label>
+                                <div class="controls">
+                                    <input type="text" name="code" id="input01" class="input-xlarge"
+                                           value="{{ user.code }}"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">电话</label>
+                                <div class="controls">
+                                    <input type="text" name="phone" id="input01" class="input-xlarge"
+                                           value="{{ user.phone }}"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input01">email邮箱</label>
+                                <div class="controls">
+                                    <input type="text" name="email" id="input01" class="input-xlarge"
+                                           value="{{ user.email }}"/>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">修改</button>
+                                <button type="reset" class="btn">重置</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

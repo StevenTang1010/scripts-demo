@@ -1,0 +1,103 @@
+{% extends 'myadmin/base.html' %}
+<!DOCTYPE html>
+{% block mainbody %}
+    <h2>
+        商品信息浏览
+    </h2>
+    <div class="form-inline">
+        <form id="edit-profile" action="{% url 'myadmin_goods_index' 1 %}" method="get" class="form-actions">
+            {% csrf_token %}
+            <label class="control-label" for="input01">关键字：</label>
+            <input type="text" name="goods" value="{{ request.GET.goods }}" class="select2-container" id="input01"
+                   placeholder="账号/姓名"/>
+{#            <label class="control-label" for="input01">性别：</label>#}
+{#            <select class="search-container" name="typeid">#}
+{#                <option value="">全部</option>#}
+{#                <option value="1" {% if request.GET.typeid == '1' %}selected{% endif %}>男</option>#}
+{#                <option value="0" {% if request.GET.typeid == '0' %}selected{% endif %}>女</option>#}
+{#            </select>#}
+            <button type="submit" class="btn btn-success">搜索</button>
+            <button type="reset" class="btn btn-success">清空</button>
+            <a href="{% url 'myadmin_goods_index' 1 %}" class="btn">全部</a>
+        </form>
+    </div>
+    <table class="table table-bordered table-striped" align="center" valign="center">
+        <thead>
+        <tr>
+            <th>id号</th>
+            <th>商品名称</th>
+            <th>商品类别</th>
+            <th>图片</th>
+            <th>价格</th>
+            <th>点击量</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for good in goodslist %}
+            <tr>
+                <td>{{ good.id }}</td>
+                <td>{{ good.goods }}</td>
+                <td>{{ good.typename }}</td>
+                <td><img src="/static/pics/s_{{ good.picname }}" style="width: 40px"></td>
+                <td>{{ good.price }}</td>
+                <td>{{ good.clicknum }}</td>
+                {% if good.state == 1 %}
+                    <td style="color: green;">新商品</td>
+                {% elif good.state == 2 %}
+                    <td>在售</td>
+                {% else %}
+                    <td style="color: red;">下架</td>
+                {% endif %}
+                <td>
+                    <a href="{% url 'myadmin_goods_edit' good.id %}" class="btn btn-primary btn-mini"
+                       style="color: white">编辑</a>
+                    <a href="{% url 'myadmin_goods_del' good.id %}" class="btn btn-danger btn-mini"
+                       style="color: white">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="pagination">
+        <ul>
+            <li>
+                {% if goodslist.has_previous %}
+                    <a class="btn btn-mini" href="{% url 'myadmin_goods_index' 1 %}?{{ parmlist|join:'&' }}">&laquo;</a>
+                {% endif %}
+            </li>
+            <li>
+                {% if goodslist.has_previous %}
+                    <a class="btn btn-mini"
+                       href="{% url 'myadmin_goods_index' pageindex|add:-1 %}?{{ parmlist|join:'&' }}">&#60;</a>
+                {% endif %}
+            </li>
+            {% for page in pagelist %}
+                {% if page == pageindex %}
+                    <li>
+                        <a style="color: red;" class="btn btn-mini active"
+                           href="{% url 'myadmin_goods_index' page %}?{{ parmlist|join:'&' }}">{{ page }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="btn btn-mini"
+                           href="{% url 'myadmin_goods_index' page %}?{{ parmlist|join:'&' }}">{{ page }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            <li>
+                {% if goodslist.has_next %}
+                    <a class="btn btn-mini"
+                       href="{% url 'myadmin_goods_index' pageindex|add:1 %}?{{ parmlist|join:'&' }}">&#62;</a>
+                {% endif %}
+            </li>
+            <li>
+                {% if goodslist.has_previous %}
+                    <a href="{% url 'myadmin_goods_index' pagecount %}?{{ parmlist|join:'&' }}">&raquo;</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+{% endblock %}

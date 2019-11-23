@@ -1,0 +1,96 @@
+{% extends 'myadmin/base.html' %}
+<!DOCTYPE html>
+{% block mainbody %}
+    <h2>
+        会员信息浏览
+    </h2>
+    <div class="form-inline">
+        <form id="edit-profile" action="{% url 'myadmin_users_index' 1 %}" method="get" class="form-actions">
+            {% csrf_token %}
+            <label class="control-label" for="input01">关键字：</label>
+            <input type="text" name="username" value="{{ request.GET.username }}" class="select2-container" id="input01"
+                   placeholder="账号/姓名"/>
+            <label class="control-label" for="input01">性别：</label>
+            <select class="search-container" name="sex">
+                <option value="">全部</option>
+                <option value="1" {% if request.GET.sex == '1' %}selected{% endif %}>男</option>
+                <option value="0" {% if request.GET.sex == '0' %}selected{% endif %}>女</option>
+            </select>
+            <button type="submit" class="btn btn-success">搜索</button>
+            <button type="reset" class="btn btn-success">清空</button>
+            <a href="{% url 'myadmin_users_index' 1 %}" class="btn">全部</a>
+        </form>
+    </div>
+    <table class="table table-bordered table-striped" align="center" valign="center">
+        <thead>
+        <tr>
+            <th>id号</th>
+            <th>账号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>邮箱</th>
+            <th>注册时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in userslist %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.name }}</td>
+                <td>{% if user.sex == 1 %}男{% else %}女{% endif %}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.addtime }}</td>
+                <td>{% if user.state == 2 %}<font color="red">禁用</font>{% elif user.state == 1 %}普通会员{% else %}
+                    <font color="green">管理员</font>{% endif %}</td>
+                <td>
+                    <a href="{% url 'myadmin_users_reset' user.id %}" class="btn btn-success btn-mini"
+                       style="color: white">重置密码</a>
+                    <a href="{% url 'myadmin_users_edit' user.id %}" class="btn btn-primary btn-mini"
+                       style="color: white">编辑</a>
+                    <a href="{% url 'myadmin_users_del' user.id %}" class="btn btn-danger btn-mini"
+                       style="color: white">删除</a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+    <div class="pagination">
+        <ul>
+            {% if userslist.has_previous %}
+                <li>
+                    <a class="btn btn-mini" href="{% url 'myadmin_users_index' 1 %}?{{ parmlist|join:'&' }}">&laquo;</a>
+                </li>
+                <li>
+                    <a class="btn btn-mini"
+                       href="{% url 'myadmin_users_index' pageindex|add:-1 %}?{{ parmlist|join:'&' }}">&#60;</a>
+                </li>
+            {% endif %}
+            {% for page in pagelist %}
+                {% if page == pageindex %}
+                    <li>
+                        <a style="color: red;" class="btn btn-mini"
+                           href="{% url 'myadmin_users_index' page %}?{{ parmlist|join:'&' }}">{{ page }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="btn btn-mini"
+                           href="{% url 'myadmin_users_index' page %}?{{ parmlist|join:'&' }}">{{ page }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if userslist.has_next %}
+                <li>
+                    <a class="btn btn-mini"
+                       href="{% url 'myadmin_users_index' pageindex|add:1 %}?{{ parmlist|join:'&' }}">&#62;</a>
+                </li>
+                <li>
+                    <a href="{% url 'myadmin_users_index' pagecount %}?{{ parmlist|join:'&' }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}

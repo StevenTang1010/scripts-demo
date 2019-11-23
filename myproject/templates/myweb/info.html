@@ -1,0 +1,43 @@
+{% extends 'myweb/base.html' %}
+<!DOCTYPE html>
+{% load static from staticfiles %}
+{% block mylink %}
+    <link rel="stylesheet" type="text/css" href="{% static 'myweb/css/order.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'myweb/css/order-app.css' %}">
+{% endblock %}
+{% block mainbody %}
+    <div class="mainbody order">
+        <div class="container">
+            <!-- 面包屑导航 -->
+            <div class="crumbs col-xs-12 col-sm-12">
+                <ol class="breadcrumb">
+                    <li class="hidden-xs hidden-sm"><a href="{% url 'index' %}">首页</a></li>
+                    <li class="hidden-xs hidden-sm"><a href="{% url 'index' %}">我的商城</a></li>
+                    <li class="active">我的订单</li>
+                </ol>
+            </div><!-- 面包屑导航 E-->
+
+            <div class="main clearfix">
+                <!-- 左侧导航 -->
+                <div class="left-nav f-fl col-md-4 hidden-xs hidden-sm">
+                    <div class="nav-main">
+                        <a href="javascript:;" class="type-title"><span class="glyphicon glyphicon-list-alt"
+                                                                        aria-hidden="true"></span>订单中心</a>
+                        <a href="{% url 'vip_orders' %}" class="ml active">我的订单</a>
+                        <a href="#" class="ml ">我的回购单</a>
+                        <a href="#" class="ml ">我的意外保</a>
+                        <a href="javascript:;" class="type-title"><span class="glyphicon glyphicon-user"
+                                                                        aria-hidden="true"></span>个人中心</a>
+                        <a href="{% url 'vip_info' %}" class="ml ">信息管理</a>
+                        <a href="#" class="ml ">密码重置</a>
+                        <a href="#" class="ml ">消息提醒</a>
+                        <a href="#" class="ml ">建议反馈</a>
+                    </div>
+                </div><!-- 左侧导航 E-->
+                <h2>
+                    操作信息提示
+                </h2>
+                <h4>
+                    {{ info }}
+                </h4>
+{% endblock %}
